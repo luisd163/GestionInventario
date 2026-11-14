@@ -19,9 +19,9 @@ namespace SistemaProveedores.Datos
 
         public IList<Producto> Listar()
         {
-            const string sql = @"SELECT [PrCódigo], [PrNombre], [PrDescripción], [Categoría]
+            const string sql = @"SELECT [PrCodigo], [PrNombre], [PrDescripcion], [Categoria]
 FROM [Producto]
-ORDER BY [PrCódigo];";
+ORDER BY [PrCodigo];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql);
             var productos = new List<Producto>();
             foreach (DataRow fila in tabla.Rows)
@@ -34,9 +34,9 @@ ORDER BY [PrCódigo];";
 
         public Producto ObtenerPorCodigo(string codigo)
         {
-            const string sql = @"SELECT [PrCódigo], [PrNombre], [PrDescripción], [Categoría]
+            const string sql = @"SELECT [PrCodigo], [PrNombre], [PrDescripcion], [Categoria]
 FROM [Producto]
-WHERE [PrCódigo] = @PrCodigo;";
+WHERE [PrCodigo] = @PrCodigo;";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@PrCodigo", 3, codigo));
             return tabla.Rows.Count == 0 ? null : Mapear(tabla.Rows[0]);
         }
@@ -44,7 +44,7 @@ WHERE [PrCódigo] = @PrCodigo;";
         public void Insertar(Producto producto)
         {
             Validar(producto);
-            const string sql = @"INSERT INTO [Producto] ([PrCódigo], [PrNombre], [PrDescripción], [Categoría])
+            const string sql = @"INSERT INTO [Producto] ([PrCodigo], [PrNombre], [PrDescripcion], [Categoria])
 VALUES (@PrCodigo, @PrNombre, @PrDescripcion, @Categoria);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, producto));
         }
@@ -58,15 +58,15 @@ VALUES (@PrCodigo, @PrNombre, @PrDescripcion, @Categoria);";
         {
             Validar(producto);
             const string sql = @"UPDATE [Producto]
-SET [PrNombre] = @PrNombre, [PrDescripción] = @PrDescripcion, [Categoría] = @Categoria
-WHERE [PrCódigo] = @PrCodigo;";
+SET [PrNombre] = @PrNombre, [PrDescripcion] = @PrDescripcion, [Categoria] = @Categoria
+WHERE [PrCodigo] = @PrCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, producto));
             ExigirFilaAfectada(filas, producto.PrCodigo);
         }
 
         public void Eliminar(string codigo)
         {
-            const string sql = "DELETE FROM [Producto] WHERE [PrCódigo] = @PrCodigo;";
+            const string sql = "DELETE FROM [Producto] WHERE [PrCodigo] = @PrCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@PrCodigo", 3, codigo));
             ExigirFilaAfectada(filas, codigo);
         }
@@ -74,10 +74,10 @@ WHERE [PrCódigo] = @PrCodigo;";
         private static Producto Mapear(DataRow fila)
         {
             return new Producto(
-                Convert.ToString(fila["PrCódigo"]),
+                Convert.ToString(fila["PrCodigo"]),
                 Convert.ToString(fila["PrNombre"]),
-                Convert.ToString(fila["PrDescripción"]),
-                Convert.ToString(fila["Categoría"]));
+                Convert.ToString(fila["PrDescripcion"]),
+                Convert.ToString(fila["Categoria"]));
         }
 
         private static void AgregarParametros(SqlCommand comando, Producto producto)

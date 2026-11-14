@@ -28,21 +28,21 @@ namespace SistemaProveedores.Datos
 
         public void RegistrarSalida(string bCodigo)
         {
-            const string sql = "UPDATE [Bitácora] SET [BTiempoSalida] = GETDATE() WHERE [BCódigo] = @BCodigo;";
+            const string sql = "UPDATE [Bitácora] SET [BTiempoSalida] = GETDATE() WHERE [BCodigo] = @BCodigo;";
             EjecutarSalida(sql, bCodigo, null);
         }
 
         public void RegistrarSalida(string codigoBitacora, DateTime fechaHoraSalida)
         {
-            const string sql = "UPDATE [Bitácora] SET [BTiempoSalida] = @BTiempoSalida WHERE [BCódigo] = @BCodigo;";
+            const string sql = "UPDATE [Bitácora] SET [BTiempoSalida] = @BTiempoSalida WHERE [BCodigo] = @BCodigo;";
             EjecutarSalida(sql, codigoBitacora, fechaHoraSalida);
         }
 
         public DataTable ListarBitacora()
         {
-            const string sql = @"SELECT b.[BCódigo], b.[BTiempoIngreso], b.[BTiempoSalida], b.[Usuario], u.[UNombre]
+            const string sql = @"SELECT b.[BCodigo], b.[BTiempoIngreso], b.[BTiempoSalida], b.[Usuario], u.[UNombre]
 FROM [Bitácora] AS b
-INNER JOIN [Usuario] AS u ON u.[UCódigo] = b.[Usuario]
+INNER JOIN [Usuario] AS u ON u.[UCodigo] = b.[Usuario]
 ORDER BY b.[BTiempoIngreso] DESC;";
             return SqlDatosHelper.Consultar(conexionBD, sql);
         }
@@ -57,7 +57,7 @@ ORDER BY b.[BTiempoIngreso] DESC;";
                     try
                     {
                         string ultimoCodigo;
-                        const string sqlUltimo = "SELECT MAX([BCódigo]) FROM [Bitácora] WITH (UPDLOCK, HOLDLOCK);";
+                        const string sqlUltimo = "SELECT MAX([BCodigo]) FROM [Bitácora] WITH (UPDLOCK, HOLDLOCK);";
                         using (SqlCommand consulta = new SqlCommand(sqlUltimo, conexion, transaccion))
                         {
                             object resultado = consulta.ExecuteScalar();
@@ -66,9 +66,9 @@ ORDER BY b.[BTiempoIngreso] DESC;";
 
                         string nuevoCodigo = SiguienteCodigo(ultimoCodigo);
                         string sqlInsertar = fechaHoraEntrada.HasValue
-                            ? @"INSERT INTO [Bitácora] ([BCódigo], [BTiempoIngreso], [BTiempoSalida], [Usuario])
+                            ? @"INSERT INTO [Bitácora] ([BCodigo], [BTiempoIngreso], [BTiempoSalida], [Usuario])
 VALUES (@BCodigo, @BTiempoIngreso, NULL, @Usuario);"
-                            : @"INSERT INTO [Bitácora] ([BCódigo], [BTiempoIngreso], [BTiempoSalida], [Usuario])
+                            : @"INSERT INTO [Bitácora] ([BCodigo], [BTiempoIngreso], [BTiempoSalida], [Usuario])
 VALUES (@BCodigo, GETDATE(), NULL, @Usuario);";
 
                         using (SqlCommand insertar = new SqlCommand(sqlInsertar, conexion, transaccion))

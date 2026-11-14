@@ -19,10 +19,10 @@ namespace SistemaProveedores.Datos
 
         public Usuario Autenticar(string uCodigo, string uContrasena)
         {
-            const string sql = @"SELECT u.[UNombre], u.[UCódigo], u.[RolUsuario]
+            const string sql = @"SELECT u.[UNombre], u.[UCodigo], u.[RolUsuario]
 FROM [Usuario] AS u
-INNER JOIN [RolUsuario] AS r ON r.[RCódigo] = u.[RolUsuario]
-WHERE u.[UCódigo] = @UCodigo AND u.[UContrasena] = @UContrasena;";
+INNER JOIN [RolUsuario] AS r ON r.[RCodigo] = u.[RolUsuario]
+WHERE u.[UCodigo] = @UCodigo AND u.[UContrasena] = @UContrasena;";
 
             using (SqlConnection conexion = conexionBD.CrearConexion())
             using (SqlCommand comando = new SqlCommand(sql, conexion))
@@ -60,16 +60,16 @@ WHERE u.[UCódigo] = @UCodigo AND u.[UContrasena] = @UContrasena;";
 
         public IList<Usuario> Listar()
         {
-            const string sql = @"SELECT [UNombre], [UCódigo], [RolUsuario]
+            const string sql = @"SELECT [UNombre], [UCodigo], [RolUsuario]
 FROM [Usuario]
-ORDER BY [UCódigo];";
+ORDER BY [UCodigo];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql);
             var usuarios = new List<Usuario>();
             foreach (DataRow fila in tabla.Rows)
             {
                 usuarios.Add(new Usuario(
                     Convert.ToString(fila["UNombre"]),
-                    Convert.ToString(fila["UCódigo"]),
+                    Convert.ToString(fila["UCodigo"]),
                     null,
                     Convert.ToString(fila["RolUsuario"])));
             }
@@ -79,9 +79,9 @@ ORDER BY [UCódigo];";
 
         public Usuario ObtenerPorCodigo(string codigo)
         {
-            const string sql = @"SELECT [UNombre], [UCódigo], [RolUsuario]
+            const string sql = @"SELECT [UNombre], [UCodigo], [RolUsuario]
 FROM [Usuario]
-WHERE [UCódigo] = @UCodigo;";
+WHERE [UCodigo] = @UCodigo;";
             using (SqlConnection conexion = conexionBD.CrearConexion())
             using (SqlCommand comando = new SqlCommand(sql, conexion))
             {
@@ -102,7 +102,7 @@ WHERE [UCódigo] = @UCodigo;";
         public void Crear(Usuario usuario, string UContrasena)
         {
             ValidarUsuario(usuario);
-            const string sql = @"INSERT INTO [Usuario] ([UCódigo], [UNombre], [RolUsuario], [UContrasena])
+            const string sql = @"INSERT INTO [Usuario] ([UCodigo], [UNombre], [RolUsuario], [UContrasena])
 VALUES (@UCodigo, @UNombre, @RolUsuario, @UContrasena);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametrosUsuario(comando, usuario, UContrasena));
         }
@@ -112,14 +112,14 @@ VALUES (@UCodigo, @UNombre, @RolUsuario, @UContrasena);";
             ValidarUsuario(usuario);
             const string sql = @"UPDATE [Usuario]
 SET [UNombre] = @UNombre, [RolUsuario] = @RolUsuario, [UContrasena] = @UContrasena
-WHERE [UCódigo] = @UCodigo;";
+WHERE [UCodigo] = @UCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametrosUsuario(comando, usuario, UContrasena));
             ExigirFilaAfectada(filas, usuario.UCodigo);
         }
 
         public void Eliminar(string codigo)
         {
-            const string sql = "DELETE FROM [Usuario] WHERE [UCódigo] = @UCodigo;";
+            const string sql = "DELETE FROM [Usuario] WHERE [UCodigo] = @UCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@UCodigo", 3, codigo));
             ExigirFilaAfectada(filas, codigo);
         }
@@ -128,7 +128,7 @@ WHERE [UCódigo] = @UCodigo;";
         {
             return new Usuario(
                 Convert.ToString(registro["UNombre"]),
-                Convert.ToString(registro["UCódigo"]),
+                Convert.ToString(registro["UCodigo"]),
                 null,
                 Convert.ToString(registro["RolUsuario"]));
         }

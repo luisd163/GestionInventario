@@ -18,7 +18,7 @@ namespace SistemaProveedores.Datos
 
         public IList<Categoria> Listar()
         {
-            const string sql = "SELECT [CCódigo], [CNombre] FROM [Categoria Producto] ORDER BY [CCódigo];";
+            const string sql = "SELECT [CCodigo], [CNombre] FROM [Categoria Producto] ORDER BY [CCodigo];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql);
             var categorias = new List<Categoria>();
             foreach (DataRow fila in tabla.Rows)
@@ -31,7 +31,7 @@ namespace SistemaProveedores.Datos
 
         public Categoria ObtenerPorCodigo(string codigo)
         {
-            const string sql = "SELECT [CCódigo], [CNombre] FROM [Categoria Producto] WHERE [CCódigo] = @CCodigo;";
+            const string sql = "SELECT [CCodigo], [CNombre] FROM [Categoria Producto] WHERE [CCodigo] = @CCodigo;";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@CCodigo", 3, codigo));
             return tabla.Rows.Count == 0 ? null : Mapear(tabla.Rows[0]);
         }
@@ -39,7 +39,7 @@ namespace SistemaProveedores.Datos
         public void Insertar(Categoria categoria)
         {
             Validar(categoria);
-            const string sql = "INSERT INTO [Categoria Producto] ([CCódigo], [CNombre]) VALUES (@CCodigo, @CNombre);";
+            const string sql = "INSERT INTO [Categoria Producto] ([CCodigo], [CNombre]) VALUES (@CCodigo, @CNombre);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, categoria));
         }
 
@@ -51,21 +51,21 @@ namespace SistemaProveedores.Datos
         public void Actualizar(Categoria categoria)
         {
             Validar(categoria);
-            const string sql = "UPDATE [Categoria Producto] SET [CNombre] = @CNombre WHERE [CCódigo] = @CCodigo;";
+            const string sql = "UPDATE [Categoria Producto] SET [CNombre] = @CNombre WHERE [CCodigo] = @CCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, categoria));
             ExigirFilaAfectada(filas, categoria.CCodigo);
         }
 
         public void Eliminar(string codigo)
         {
-            const string sql = "DELETE FROM [Categoria Producto] WHERE [CCódigo] = @CCodigo;";
+            const string sql = "DELETE FROM [Categoria Producto] WHERE [CCodigo] = @CCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@CCodigo", 3, codigo));
             ExigirFilaAfectada(filas, codigo);
         }
 
         private static Categoria Mapear(DataRow fila)
         {
-            return new Categoria(Convert.ToString(fila["CCódigo"]), Convert.ToString(fila["CNombre"]));
+            return new Categoria(Convert.ToString(fila["CCodigo"]), Convert.ToString(fila["CNombre"]));
         }
 
         private static void AgregarParametros(System.Data.SqlClient.SqlCommand comando, Categoria categoria)

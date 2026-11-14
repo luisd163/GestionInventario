@@ -20,9 +20,9 @@ namespace SistemaProveedores.Datos
 
         public IList<Proveedor> Listar()
         {
-            const string sql = @"SELECT [PCódigo], [PNombre], [PCiudad], [PDirección]
+            const string sql = @"SELECT [PCodigo], [PNombre], [PCiudad], [PDireccion]
 FROM [Proveedor]
-ORDER BY [PCódigo];";
+ORDER BY [PCodigo];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql);
             var proveedores = new List<Proveedor>();
             foreach (DataRow fila in tabla.Rows)
@@ -35,9 +35,9 @@ ORDER BY [PCódigo];";
 
         public Proveedor ObtenerPorCodigo(string codigo)
         {
-            const string sql = @"SELECT [PCódigo], [PNombre], [PCiudad], [PDirección]
+            const string sql = @"SELECT [PCodigo], [PNombre], [PCiudad], [PDireccion]
 FROM [Proveedor]
-WHERE [PCódigo] = @PCodigo;";
+WHERE [PCodigo] = @PCodigo;";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@PCodigo", 3, codigo));
             return tabla.Rows.Count == 0 ? null : Mapear(tabla.Rows[0]);
         }
@@ -45,7 +45,7 @@ WHERE [PCódigo] = @PCodigo;";
         public void Insertar(Proveedor proveedor)
         {
             Validar(proveedor);
-            const string sql = @"INSERT INTO [Proveedor] ([PCódigo], [PNombre], [PCiudad], [PDirección])
+            const string sql = @"INSERT INTO [Proveedor] ([PCodigo], [PNombre], [PCiudad], [PDireccion])
 VALUES (@PCodigo, @PNombre, @PCiudad, @PDireccion);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, proveedor));
         }
@@ -59,15 +59,15 @@ VALUES (@PCodigo, @PNombre, @PCiudad, @PDireccion);";
         {
             Validar(proveedor);
             const string sql = @"UPDATE [Proveedor]
-SET [PNombre] = @PNombre, [PCiudad] = @PCiudad, [PDirección] = @PDireccion
-WHERE [PCódigo] = @PCodigo;";
+SET [PNombre] = @PNombre, [PCiudad] = @PCiudad, [PDireccion] = @PDireccion
+WHERE [PCodigo] = @PCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, proveedor));
             ExigirFilaAfectada(filas, proveedor.PCodigo);
         }
 
         public void Eliminar(string codigo)
         {
-            const string sql = "DELETE FROM [Proveedor] WHERE [PCódigo] = @PCodigo;";
+            const string sql = "DELETE FROM [Proveedor] WHERE [PCodigo] = @PCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@PCodigo", 3, codigo));
             ExigirFilaAfectada(filas, codigo);
         }
@@ -95,10 +95,10 @@ WHERE [PCódigo] = @PCodigo;";
         private static Proveedor Mapear(DataRow fila)
         {
             return new Proveedor(
-                Convert.ToString(fila["PCódigo"]),
+                Convert.ToString(fila["PCodigo"]),
                 Convert.ToString(fila["PNombre"]),
                 Convert.ToString(fila["PCiudad"]),
-                Convert.ToString(fila["PDirección"]));
+                Convert.ToString(fila["PDireccion"]));
         }
 
         private static void AgregarParametros(System.Data.SqlClient.SqlCommand comando, Proveedor proveedor)
