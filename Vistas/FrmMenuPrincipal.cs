@@ -61,9 +61,9 @@ namespace Vistas
             var entidades = new ToolStripMenuItem("&Entidades");
             entidades.DropDownItems.AddRange(new ToolStripItem[]
             {
-                Item("Categorías", (s, e) => Pendiente("Categorías")),
-                Item("Productos", (s, e) => Pendiente("Productos")),
-                Item("Proveedores", (s, e) => Pendiente("Proveedores")),
+                Item("Categorías", (s, e) => AbrirEntidades(0)),
+                Item("Productos", (s, e) => AbrirEntidades(1)),
+                Item("Proveedores", (s, e) => AbrirEntidades(2)),
                 new ToolStripSeparator(),
                 Item("Usuarios", (s, e) => AbrirUsuariosBitacora(false), esAdmin)
             });
@@ -71,15 +71,14 @@ namespace Vistas
             var transacciones = new ToolStripMenuItem("&Transacciones") { Enabled = escribe };
             transacciones.DropDownItems.AddRange(new ToolStripItem[]
             {
-                Item("Catálogo de proveedor", (s, e) => Pendiente("Catálogo de proveedor"), escribe),
-                Item("Clasificación de productos", (s, e) => Pendiente("Clasificación de productos"), escribe)
+                Item("Catálogo de proveedor", (s, e) => AbrirTransacciones(1), escribe),
+                Item("Clasificación de productos", (s, e) => AbrirTransacciones(0), escribe)
             });
 
             var reportes = new ToolStripMenuItem("&Reportes / Consultas");
             reportes.DropDownItems.AddRange(new ToolStripItem[]
             {
-                Item("Consultas del sistema", (s, e) => Pendiente("Consultas del sistema")),
-                Item("Reportes filtrados", (s, e) => Pendiente("Reportes filtrados"))
+                Item("Consultas y reportes", (s, e) => AbrirConsultas())
             });
 
             var auditoria = new ToolStripMenuItem("&Auditoría") { Enabled = esAdmin };
@@ -106,11 +105,72 @@ namespace Vistas
             Controls.Add(estado);
         }
 
-        private void Pendiente(string modulo)
+        private void AbrirEntidades(int pestana)
         {
-            // Punto de extensión: reemplazar por la apertura del formulario hijo cuando exista.
-            MessageBox.Show("El módulo \"" + modulo + "\" se entrega en la siguiente parte de la interfaz.",
-                "En construcción", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                foreach (Form hijo in MdiChildren)
+                {
+                    if (hijo is FrmEntidadesCatalogo existente)
+                    {
+                        existente.MostrarPestana(pestana);
+                        existente.Activate();
+                        return;
+                    }
+                }
+
+                var frm = new FrmEntidadesCatalogo(pestana) { MdiParent = this };
+                frm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "No se pudo abrir la ventana", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AbrirTransacciones(int pestana)
+        {
+            try
+            {
+                foreach (Form hijo in MdiChildren)
+                {
+                    if (hijo is FrmTransaccionesRelaciones existente)
+                    {
+                        existente.MostrarPestana(pestana);
+                        existente.Activate();
+                        return;
+                    }
+                }
+
+                var frm = new FrmTransaccionesRelaciones(pestana) { MdiParent = this };
+                frm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "No se pudo abrir la ventana", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AbrirConsultas()
+        {
+            try
+            {
+                foreach (Form hijo in MdiChildren)
+                {
+                    if (hijo is FrmConsultasYReportes existente)
+                    {
+                        existente.Activate();
+                        return;
+                    }
+                }
+
+                var frm = new FrmConsultasYReportes { MdiParent = this };
+                frm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "No se pudo abrir la ventana", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void AbrirUsuariosBitacora(bool bitacora)
