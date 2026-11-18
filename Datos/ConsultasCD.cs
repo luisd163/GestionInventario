@@ -20,8 +20,8 @@ namespace SistemaProveedores.Datos
         {
             const string sql = @"SELECT p.[PrNombre], c.[CNombre], pr.[PNombre], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Categoria Producto] AS c ON c.[CCodigo] = p.[Categoria]
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CategoriaProducto] AS c ON c.[CCodigo] = p.[Categoria]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 ORDER BY p.[PrNombre], cp.[CaPrecio];";
 
@@ -43,9 +43,9 @@ ORDER BY p.[PrNombre], cp.[CaPrecio];";
         public IList<AuditoriaAccesoDTO> AuditoriaAccesosPorUsuario()
         {
             const string sql = @"SELECT u.[UNombre], r.[RNombre], b.[BTiempoIngreso], b.[BTiempoSalida]
-FROM [Bitácora] AS b
+FROM [Bitacora] AS b
 INNER JOIN [Usuario] AS u ON u.[UCodigo] = b.[Usuario]
-INNER JOIN [Rol Usuario] AS r ON r.[RCodigo] = u.[Rol]
+INNER JOIN [RolUsuario] AS r ON r.[RCodigo] = u.[Rol]
 ORDER BY b.[BTiempoIngreso] DESC;";
 
             var resultado = new List<AuditoriaAccesoDTO>();
@@ -69,8 +69,8 @@ ORDER BY b.[BTiempoIngreso] DESC;";
         {
             const string sql = @"SELECT p.[PrNombre], c.[CNombre], pr.[PCiudad]
 FROM [Producto] AS p
-INNER JOIN [Categoria Producto] AS c ON c.[CCodigo] = p.[Categoria]
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CategoriaProducto] AS c ON c.[CCodigo] = p.[Categoria]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 ORDER BY c.[CNombre], p.[PrNombre], pr.[PCiudad];";
 
@@ -93,16 +93,16 @@ ORDER BY c.[CNombre], p.[PrNombre], pr.[PCiudad];";
             const string sql = @"SELECT pr.[PCodigo], pr.[PNombre], p.[PrCodigo], cp.[CaPrecio],
 (
     SELECT AVG(cp2.[CaPrecio])
-    FROM [Catálogo Proveedor] AS cp2
+    FROM [CatalogoProveedor] AS cp2
     WHERE cp2.[Producto] = cp.[Producto]
 ) AS [PrecioPromedio]
-FROM [Catálogo Proveedor] AS cp
+FROM [CatalogoProveedor] AS cp
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 INNER JOIN [Producto] AS p ON p.[PrCodigo] = cp.[Producto]
 WHERE cp.[CaPrecio] >
 (
     SELECT AVG(cp2.[CaPrecio])
-    FROM [Catálogo Proveedor] AS cp2
+    FROM [CatalogoProveedor] AS cp2
     WHERE cp2.[Producto] = cp.[Producto]
 )
 ORDER BY p.[PrNombre], cp.[CaPrecio] DESC;";
@@ -130,7 +130,7 @@ FROM [Producto] AS p
 WHERE NOT EXISTS
 (
     SELECT 1
-    FROM [Catálogo Proveedor] AS cp
+    FROM [CatalogoProveedor] AS cp
     WHERE cp.[Producto] = p.[PrCodigo]
 )
 ORDER BY p.[PrNombre];";
@@ -153,8 +153,8 @@ ORDER BY p.[PrNombre];";
         {
             const string sql = @"SELECT p.[PrCodigo], p.[PrNombre], c.[CNombre], pr.[PCodigo], pr.[PNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Categoria Producto] AS c ON c.[CCodigo] = p.[Categoria]
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CategoriaProducto] AS c ON c.[CCodigo] = p.[Categoria]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 ORDER BY p.[PrNombre], pr.[PNombre];";
             return SqlDatosHelper.Consultar(conexionBD, sql);
@@ -163,9 +163,9 @@ ORDER BY p.[PrNombre], pr.[PNombre];";
         public DataTable InventarioPorCategoria()
         {
             const string sql = @"SELECT c.[CCodigo], c.[CNombre], p.[PrCodigo], p.[PrNombre], cp.[CaCantidad], cp.[CaPrecio]
-FROM [Categoria Producto] AS c
+FROM [CategoriaProducto] AS c
 INNER JOIN [Producto] AS p ON p.[Categoria] = c.[CCodigo]
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 ORDER BY c.[CNombre], p.[PrNombre];";
             return SqlDatosHelper.Consultar(conexionBD, sql);
         }
@@ -174,9 +174,9 @@ ORDER BY c.[CNombre], p.[PrNombre];";
         {
             const string sql = @"SELECT pr.[PCodigo], pr.[PNombre], c.[CNombre], p.[PrCodigo], p.[PrNombre], cp.[CaCantidad]
 FROM [Proveedor] AS pr
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
 INNER JOIN [Producto] AS p ON p.[PrCodigo] = cp.[Producto]
-INNER JOIN [Categoria Producto] AS c ON c.[CCodigo] = p.[Categoria]
+INNER JOIN [CategoriaProducto] AS c ON c.[CCodigo] = p.[Categoria]
 ORDER BY pr.[PNombre], c.[CNombre];";
             return SqlDatosHelper.Consultar(conexionBD, sql);
         }
@@ -188,7 +188,7 @@ FROM [Producto] AS p
 WHERE EXISTS
 (
     SELECT 1
-    FROM [Catálogo Proveedor] AS cp
+    FROM [CatalogoProveedor] AS cp
     WHERE cp.[Producto] = p.[PrCodigo] AND cp.[CaCantidad] > @CantidadMinima
 )
 ORDER BY p.[PrNombre];";
@@ -198,7 +198,7 @@ ORDER BY p.[PrNombre];";
         public DataTable CategoriasConProductos()
         {
             const string sql = @"SELECT c.[CCodigo], c.[CNombre]
-FROM [Categoria Producto] AS c
+FROM [CategoriaProducto] AS c
 WHERE c.[CCodigo] IN
 (
     SELECT p.[Categoria]

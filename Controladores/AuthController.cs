@@ -32,12 +32,12 @@ namespace Controladores
 
         public bool PuedeEscribirCatalogos()
         {
-            return SesionUsuario.EstaAutenticado && (SesionUsuario.CodigoRol == "ADM" || SesionUsuario.CodigoRol == "TRD");
+            return SesionUsuario.EstaAutenticado && (SesionUsuario.CodigoRol == "001" || SesionUsuario.CodigoRol == "002");
         }
 
         public bool EsAdministrador()
         {
-            return SesionUsuario.EstaAutenticado && SesionUsuario.CodigoRol == "ADM";
+            return SesionUsuario.EstaAutenticado && SesionUsuario.CodigoRol == "001";
         }
     }
 }

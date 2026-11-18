@@ -18,7 +18,7 @@ namespace SistemaProveedores.Datos
         public IList<CatalogoProveedor> ObtenerCatalogo(string codigoProveedor)
         {
             const string sql = @"SELECT [Proveedor], [Producto], [CaCantidad], [CaPrecio]
-FROM [Catálogo Proveedor]
+FROM [CatalogoProveedor]
 WHERE [Proveedor] = @Proveedor
 ORDER BY [Producto];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql, comando => SqlDatosHelper.AgregarChar(comando, "@Proveedor", 3, codigoProveedor));
@@ -38,7 +38,7 @@ ORDER BY [Producto];";
         public void AsociarProducto(string codigoProveedor, string codigoProducto, int cantidad, decimal precio)
         {
             ValidarInventario(cantidad, precio);
-            const string sql = @"INSERT INTO [Catálogo Proveedor] ([Proveedor], [Producto], [CaCantidad], [CaPrecio])
+            const string sql = @"INSERT INTO [CatalogoProveedor] ([Proveedor], [Producto], [CaCantidad], [CaPrecio])
 VALUES (@Proveedor, @Producto, @CaCantidad, @CaPrecio);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, codigoProveedor, codigoProducto, cantidad, precio));
         }
@@ -46,7 +46,7 @@ VALUES (@Proveedor, @Producto, @CaCantidad, @CaPrecio);";
         public void ActualizarInventarioPrecio(string codigoProveedor, string codigoProducto, int cantidad, decimal precio)
         {
             ValidarInventario(cantidad, precio);
-            const string sql = @"UPDATE [Catálogo Proveedor]
+            const string sql = @"UPDATE [CatalogoProveedor]
 SET [CaCantidad] = @CaCantidad, [CaPrecio] = @CaPrecio
 WHERE [Proveedor] = @Proveedor AND [Producto] = @Producto;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametros(comando, codigoProveedor, codigoProducto, cantidad, precio));
@@ -55,7 +55,7 @@ WHERE [Proveedor] = @Proveedor AND [Producto] = @Producto;";
 
         public void DesasociarProducto(string codigoProveedor, string codigoProducto)
         {
-            const string sql = "DELETE FROM [Catálogo Proveedor] WHERE [Proveedor] = @Proveedor AND [Producto] = @Producto;";
+            const string sql = "DELETE FROM [CatalogoProveedor] WHERE [Proveedor] = @Proveedor AND [Producto] = @Producto;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando =>
             {
                 SqlDatosHelper.AgregarChar(comando, "@Proveedor", 3, codigoProveedor);
@@ -74,9 +74,9 @@ WHERE [Proveedor] = @Proveedor AND [Producto] = @Producto;";
 
         private static void ValidarInventario(int cantidad, decimal precio)
         {
-            if (cantidad <= 0)
+            if (cantidad < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(cantidad), "La cantidad debe ser mayor que cero.");
+                throw new ArgumentOutOfRangeException(nameof(cantidad), "La cantidad no puede ser negativa.");
             }
 
             if (precio <= 0)

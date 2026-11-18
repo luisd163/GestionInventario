@@ -34,9 +34,9 @@ namespace Vistas
         {
             switch (codigo)
             {
-                case "ADM": return "Administrador";
-                case "TRD": return "Usuario Tradicional";
-                case "ESP": return "Usuario Esporádico";
+                case "001": return "Administrador";
+                case "002": return "Tradicional";
+                case "003": return "Esparadico";
                 default: return codigo;
             }
         }

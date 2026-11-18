@@ -32,7 +32,7 @@ namespace Logica
 
             ReglasLN.ValidarObligatorio(usuario.CodigoUsuario, nameof(usuario.CodigoUsuario));
             ReglasLN.ValidarObligatorio(usuario.NombreUsuario, nameof(usuario.NombreUsuario));
-            if (usuario.CodigoRol != "ADM" && usuario.CodigoRol != "TRD" && usuario.CodigoRol != "ESP")
+            if (usuario.CodigoRol != "001" && usuario.CodigoRol != "002" && usuario.CodigoRol != "003")
             {
                 throw new InvalidOperationException("El usuario tiene un rol no reconocido.");
             }

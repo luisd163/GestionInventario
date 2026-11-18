@@ -54,9 +54,9 @@ namespace Logica
             ReglasLN.ValidarObligatorio(nombre, nameof(nombre));
             ReglasLN.ValidarIdentificador(codigo, nameof(codigo));
             ReglasLN.ValidarIdentificador(codigoRol, nameof(codigoRol));
-            if (codigoRol != "ADM" && codigoRol != "TRD" && codigoRol != "ESP")
+            if (codigoRol != "001" && codigoRol != "002" && codigoRol != "003")
             {
-                throw new ArgumentException("El rol debe ser ADM, TRD o ESP.", nameof(codigoRol));
+                throw new ArgumentException("El rol debe ser 001, 002 o 003.", nameof(codigoRol));
             }
         }
     }

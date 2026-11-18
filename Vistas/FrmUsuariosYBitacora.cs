@@ -23,9 +23,9 @@ namespace Vistas
 
         private static readonly RolItem[] Roles =
         {
-            new RolItem("ADM", "Administrador"),
-            new RolItem("TRD", "Usuario Tradicional"),
-            new RolItem("ESP", "Usuario Esporádico")
+            new RolItem("001", "Administrador"),
+            new RolItem("002", "Tradicional"),
+            new RolItem("003", "Esparadico")
         };
 
         private readonly TabControl tabs = new TabControl { Dock = DockStyle.Fill };
@@ -209,10 +209,10 @@ namespace Vistas
 
         private void ValidarAdministradorUnico(string codigo, string rol)
         {
-            if (rol != "ADM") return;
+            if (rol != "001") return;
             foreach (Usuario u in usuarios)
             {
-                if ((u.RolUsuario ?? "").Trim() == "ADM" && (u.UCodigo ?? "").Trim() != codigo.Trim())
+                if ((u.RolUsuario ?? "").Trim() == "001" && (u.UCodigo ?? "").Trim() != codigo.Trim())
                 {
                     throw new InvalidOperationException("Ya existe un usuario Administrador; solo puede haber uno.");
                 }

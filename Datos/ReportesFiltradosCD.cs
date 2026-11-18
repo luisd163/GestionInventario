@@ -40,7 +40,7 @@ namespace SistemaProveedores.Datos
             const string sql = @"SELECT pr.[PCodigo], pr.[PNombre], pr.[PCiudad], pr.[PDireccion],
        p.[PrNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Proveedor] AS pr
-LEFT JOIN [Catálogo Proveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
+LEFT JOIN [CatalogoProveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
 LEFT JOIN [Producto] AS p ON p.[PrCodigo] = cp.[Producto]
 WHERE pr.[PCiudad] = @Ciudad
 ORDER BY pr.[PNombre], p.[PrNombre];";
@@ -53,7 +53,7 @@ ORDER BY pr.[PNombre], p.[PrNombre];";
         {
             const string sql = @"SELECT pr.[PCodigo], pr.[PNombre], p.[PrCodigo], p.[PrNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Proveedor] AS pr
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
 INNER JOIN [Producto] AS p ON p.[PrCodigo] = cp.[Producto]
 WHERE pr.[PCodigo] = @Proveedor
 ORDER BY p.[PrNombre];";
@@ -66,7 +66,7 @@ ORDER BY p.[PrNombre];";
         {
             const string sql = @"SELECT p.[PrCodigo], p.[PrNombre], pr.[PCodigo], pr.[PNombre], pr.[PCiudad], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 WHERE p.[PrCodigo] = @Producto
 ORDER BY cp.[CaPrecio] ASC, pr.[PNombre];";
@@ -78,7 +78,7 @@ ORDER BY cp.[CaPrecio] ASC, pr.[PNombre];";
         public DataTable CatalogoPorCategoria(string cCodigo)
         {
             const string sql = @"SELECT DISTINCT c.[CCodigo], c.[CNombre], p.[PrCodigo], p.[PrNombre], p.[PrDescripcion]
-FROM [Categoria Producto] AS c
+FROM [CategoriaProducto] AS c
 INNER JOIN " + Clasif + @" AS k ON k.[Cat] = c.[CCodigo]
 INNER JOIN [Producto] AS p ON p.[PrCodigo] = k.[Prod]
 WHERE c.[CCodigo] = @Categoria
@@ -109,9 +109,9 @@ ORDER BY p.[PrNombre];";
             string sql = @"SELECT c.[CCodigo], c.[CNombre],
        COUNT(DISTINCT k.[Prod]) AS [TotalProductos],
        COUNT(DISTINCT cp.[Proveedor]) AS [TotalProveedores]
-FROM [Categoria Producto] AS c
+FROM [CategoriaProducto] AS c
 INNER JOIN " + Clasif + @" AS k ON k.[Cat] = c.[CCodigo]
-LEFT JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = k.[Prod]
+LEFT JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = k.[Prod]
 WHERE c.[CCodigo] IN (" + parametros + @")
 GROUP BY c.[CCodigo], c.[CNombre]
 ORDER BY c.[CNombre];";

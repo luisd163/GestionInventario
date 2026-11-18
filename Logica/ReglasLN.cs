@@ -19,7 +19,7 @@ namespace Logica
         internal static void ExigirAdministrador()
         {
             ExigirSesion();
-            if (SesionUsuario.CodigoRol != "ADM")
+            if (SesionUsuario.CodigoRol != "001")
             {
                 throw new UnauthorizedAccessException("Esta operación requiere permisos de administrador.");
             }
@@ -28,7 +28,7 @@ namespace Logica
         internal static void ExigirEscrituraCatalogos()
         {
             ExigirSesion();
-            if (SesionUsuario.CodigoRol != "ADM" && SesionUsuario.CodigoRol != "TRD")
+            if (SesionUsuario.CodigoRol != "001" && SesionUsuario.CodigoRol != "002")
             {
                 throw new UnauthorizedAccessException("El rol actual solo tiene permiso de consulta.");
             }
@@ -56,6 +56,14 @@ namespace Logica
             if (valor <= 0)
             {
                 throw new ArgumentOutOfRangeException(campo, "El valor debe ser mayor que cero.");
+            }
+        }
+
+        internal static void ValidarNoNegativo(int valor, string campo)
+        {
+            if (valor < 0)
+            {
+                throw new ArgumentOutOfRangeException(campo, "El valor no puede ser negativo.");
             }
         }
 

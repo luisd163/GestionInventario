@@ -88,7 +88,7 @@ namespace Logica
         {
             ReglasLN.ValidarIdentificador(codigoProveedor, nameof(codigoProveedor));
             ReglasLN.ValidarIdentificador(codigoProducto, nameof(codigoProducto));
-            ReglasLN.ValidarPositivo(cantidad, nameof(cantidad));
+            ReglasLN.ValidarNoNegativo(cantidad, nameof(cantidad));
             ReglasLN.ValidarPositivo(precio, nameof(precio));
         }
     }

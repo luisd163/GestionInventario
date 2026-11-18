@@ -19,9 +19,9 @@ namespace SistemaProveedores.Datos
 
         public Usuario Autenticar(string uCodigo, string uContrasena)
         {
-            const string sql = @"SELECT u.[UNombre], u.[UCodigo], u.[RolUsuario]
+            const string sql = @"SELECT u.[UNombre], u.[UCodigo], u.[Rol] AS [RolUsuario]
 FROM [Usuario] AS u
-INNER JOIN [RolUsuario] AS r ON r.[RCodigo] = u.[RolUsuario]
+INNER JOIN [RolUsuario] AS r ON r.[RCodigo] = u.[Rol]
 WHERE u.[UCodigo] = @UCodigo AND u.[UContrasena] = @UContrasena;";
 
             using (SqlConnection conexion = conexionBD.CrearConexion())
@@ -60,7 +60,7 @@ WHERE u.[UCodigo] = @UCodigo AND u.[UContrasena] = @UContrasena;";
 
         public IList<Usuario> Listar()
         {
-            const string sql = @"SELECT [UNombre], [UCodigo], [RolUsuario]
+            const string sql = @"SELECT [UNombre], [UCodigo], [Rol] AS [RolUsuario]
 FROM [Usuario]
 ORDER BY [UCodigo];";
             DataTable tabla = SqlDatosHelper.Consultar(conexionBD, sql);
@@ -79,7 +79,7 @@ ORDER BY [UCodigo];";
 
         public Usuario ObtenerPorCodigo(string codigo)
         {
-            const string sql = @"SELECT [UNombre], [UCodigo], [RolUsuario]
+            const string sql = @"SELECT [UNombre], [UCodigo], [Rol] AS [RolUsuario]
 FROM [Usuario]
 WHERE [UCodigo] = @UCodigo;";
             using (SqlConnection conexion = conexionBD.CrearConexion())
@@ -102,7 +102,7 @@ WHERE [UCodigo] = @UCodigo;";
         public void Crear(Usuario usuario, string UContrasena)
         {
             ValidarUsuario(usuario);
-            const string sql = @"INSERT INTO [Usuario] ([UCodigo], [UNombre], [RolUsuario], [UContrasena])
+            const string sql = @"INSERT INTO [Usuario] ([UCodigo], [UNombre], [Rol], [UContrasena])
 VALUES (@UCodigo, @UNombre, @RolUsuario, @UContrasena);";
             SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametrosUsuario(comando, usuario, UContrasena));
         }
@@ -111,7 +111,7 @@ VALUES (@UCodigo, @UNombre, @RolUsuario, @UContrasena);";
         {
             ValidarUsuario(usuario);
             const string sql = @"UPDATE [Usuario]
-SET [UNombre] = @UNombre, [RolUsuario] = @RolUsuario, [UContrasena] = @UContrasena
+SET [UNombre] = @UNombre, [Rol] = @RolUsuario, [UContrasena] = @UContrasena
 WHERE [UCodigo] = @UCodigo;";
             int filas = SqlDatosHelper.Ejecutar(conexionBD, sql, comando => AgregarParametrosUsuario(comando, usuario, UContrasena));
             ExigirFilaAfectada(filas, usuario.UCodigo);

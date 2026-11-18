@@ -9,8 +9,7 @@ namespace SistemaProveedores.Datos
 {
     public sealed class ClasificacionProductoCD : IClasificacionDatos
     {
-        // Ajustar si la tabla real se llama distinto (ej. [ClasificacionProducto]).
-        internal const string Tabla = "[Clasificación Producto]";
+        internal const string Tabla = "[ClasificacionProducto]";
 
         private readonly ConexionBD conexionBD;
 

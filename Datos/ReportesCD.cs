@@ -19,7 +19,7 @@ namespace SistemaProveedores.Datos
         {
             const string sql = @"SELECT pr.[PCodigo], pr.[PNombre], p.[PrCodigo], p.[PrNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Proveedor] AS pr
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Proveedor] = pr.[PCodigo]
 INNER JOIN [Producto] AS p ON p.[PrCodigo] = cp.[Producto]
 WHERE (@Proveedor IS NULL OR pr.[PCodigo] = @Proveedor)
 ORDER BY pr.[PNombre], p.[PrNombre];";
@@ -30,7 +30,7 @@ ORDER BY pr.[PNombre], p.[PrNombre];";
         {
             const string sql = @"SELECT p.[PrCodigo], p.[PrNombre], pr.[PCodigo], pr.[PNombre], pr.[PCiudad], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 WHERE (@Producto IS NULL OR p.[PrCodigo] = @Producto)
 ORDER BY p.[PrNombre], pr.[PNombre];";
@@ -41,7 +41,7 @@ ORDER BY p.[PrNombre], pr.[PNombre];";
         {
             const string sql = @"SELECT p.[PrCodigo], p.[PrNombre], pr.[PCodigo], pr.[PNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 WHERE (@Texto IS NULL OR p.[PrNombre] LIKE '%' + @Texto + '%')
   AND (@Proveedor IS NULL OR pr.[PCodigo] = @Proveedor)
@@ -56,7 +56,7 @@ ORDER BY p.[PrNombre], pr.[PNombre];";
         public DataTable ProductosPorCategoria(string codigoCategoria)
         {
             const string sql = @"SELECT c.[CCodigo], c.[CNombre], p.[PrCodigo], p.[PrNombre], p.[PrDescripcion]
-FROM [Categoria Producto] AS c
+FROM [CategoriaProducto] AS c
 INNER JOIN [Producto] AS p ON p.[Categoria] = c.[CCodigo]
 WHERE (@Categoria IS NULL OR c.[CCodigo] = @Categoria)
 ORDER BY c.[CNombre], p.[PrNombre];";
@@ -67,7 +67,7 @@ ORDER BY c.[CNombre], p.[PrNombre];";
         {
             const string sql = @"SELECT c.[CCodigo], c.[CNombre], p.[PrCodigo], p.[PrNombre]
 FROM [Producto] AS p
-INNER JOIN [Categoria Producto] AS c ON c.[CCodigo] = p.[Categoria]
+INNER JOIN [CategoriaProducto] AS c ON c.[CCodigo] = p.[Categoria]
 WHERE (@Texto IS NULL OR p.[PrNombre] LIKE '%' + @Texto + '%')
 ORDER BY p.[PrNombre];";
             return SqlDatosHelper.Consultar(conexionBD, sql, comando => SqlDatosHelper.AgregarVarChar(comando, "@Texto", 50, textoProducto));
@@ -94,7 +94,7 @@ ORDER BY p.[PrNombre];";
         {
             const string sql = @"SELECT p.[PrCodigo], p.[PrNombre], pr.[PNombre], cp.[CaCantidad], cp.[CaPrecio]
 FROM [Producto] AS p
-INNER JOIN [Catálogo Proveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
+INNER JOIN [CatalogoProveedor] AS cp ON cp.[Producto] = p.[PrCodigo]
 INNER JOIN [Proveedor] AS pr ON pr.[PCodigo] = cp.[Proveedor]
 ORDER BY p.[PrNombre], pr.[PNombre];";
             return SqlDatosHelper.Consultar(conexionBD, sql);
@@ -103,7 +103,7 @@ ORDER BY p.[PrNombre], pr.[PNombre];";
         private DataTable Bitacora(DateTime? desde, DateTime? hasta)
         {
             const string sql = @"SELECT b.[BCodigo], b.[BTiempoIngreso], b.[BTiempoSalida], b.[Usuario], u.[UNombre]
-FROM [Bitácora] AS b
+FROM [Bitacora] AS b
 INNER JOIN [Usuario] AS u ON u.[UCodigo] = b.[Usuario]
 WHERE (@Desde IS NULL OR b.[BTiempoIngreso] >= @Desde)
   AND (@Hasta IS NULL OR b.[BTiempoIngreso] < DATEADD(day, 1, @Hasta))
